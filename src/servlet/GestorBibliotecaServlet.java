@@ -21,7 +21,10 @@ public class GestorBibliotecaServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		String usuario = request.getParameter("usuario");
 		String password = request.getParameter("password");
-		if (usuario.equals("Gerard")&&password.equals("1234")) {
+		
+		BaseDatos bd = new BaseDatos();
+		
+		if (bd.compruebaUsuario(usuario, password)) {
 			boolean iniciado = Yainiciado;
 			if (!Yainiciado == true) {
 				Yainiciado = true;
@@ -35,14 +38,15 @@ public class GestorBibliotecaServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		// TODO Auto-generated method stub
 		String usuario = request.getParameter("usuario");
 		String password = request.getParameter("password");
-		if (usuario.equals("Gerard")&&password.equals("1234")) {
+		BaseDatos bd = new BaseDatos();
+		if (bd.compruebaUsuario(usuario, password)) {
 			boolean iniciado = Yainiciado;
 			if (!Yainiciado == true) {
 				Yainiciado = true;
-				response.sendRedirect("bienvenida.jsp?usuario=" + usuario + "&iniciado=" + iniciado + "&method=POST");
+				response.sendRedirect("bienvenida.jsp?usuario=" + usuario + "&iniciado=" + iniciado + "&method=GET");
 			}
 		} else {
 			response.sendRedirect("error.jsp?usuario=" + usuario);
