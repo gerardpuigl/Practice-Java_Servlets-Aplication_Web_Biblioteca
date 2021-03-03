@@ -42,4 +42,10 @@ public class Libro {
 	public int getNovedad() {
 		return novedad;
 	}
+	@Override
+	public String toString() {
+		return "Libro [id=" + id + ", titulo=" + titulo + ", autor=" + autor + ", editorial=" + editorial + ", fecha="
+				+ fecha + ", categoria=" + categoria + ", novedad=" + novedad + "]";
+	}
+	
 }

@@ -84,7 +84,7 @@ public class BaseDatos {
 	}
 
 	public void eliminarLibro(String id) {
-		String query = " DELETE FROM libros WHERE id=" + Integer.parseInt(id) ;
+		String query = " DELETE FROM libros WHERE id=" + Integer.parseInt(id);
 
 		try {
 			PreparedStatement preparedStmt = conexion.prepareStatement(query);
@@ -93,5 +93,41 @@ public class BaseDatos {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	public Libro recuperarLibro(String id) {
+		Libro libro=null;
+		try {
+			Statement s = conexion.createStatement();
+			String query = "SELECT * FROM libros WHERE id="+ Integer.parseInt(id);
+			s.execute(query);
+			ResultSet rs = s.getResultSet();
+			rs.next();
+			libro = new Libro(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5),
+					rs.getString(6), rs.getInt(7));
+		}catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return libro;	
+	}
 		
+	public void modificarLibro(Libro libro) {
+		
+		System.out.println(libro.toString());
+		
+		String query ="UPDATE libros SET titulo=?, autor=?, editorial=?, fecha=?, categoria=?, novedad=? WHERE id=" + libro.getId() ;
+		try {				
+			PreparedStatement preparedStmt = conexion.prepareStatement(query);
+			preparedStmt.setString(1,libro.getTitulo());
+			preparedStmt.setString(2,libro.getAutor());
+			preparedStmt.setString(3,libro.getEditorial());
+			Date sqlDate = new Date(libro.getFecha().getTime());
+			preparedStmt.setDate(4, sqlDate);
+			preparedStmt.setString(5, libro.getCategoria());
+			preparedStmt.setInt(6,libro.getNovedad());
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}	
 }

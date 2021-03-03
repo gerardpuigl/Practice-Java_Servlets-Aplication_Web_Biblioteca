@@ -26,12 +26,8 @@ public class ConsultaLibrosServlet extends HttpServlet {
 		
 		String boton = request.getParameter("submit");
 		String filtro="";
-		if (boton.equals("Consulta Libros")) {
-			
+		if (boton.equals("Consulta Libros")) {		
 			filtro = request.getParameter("titulo");
-
-
-			
 		}else if (boton.equals("Insertar Libro")) {
 			int id = Integer.parseInt(request.getParameter("id"));
 			String titulo = request.getParameter("titulo");
@@ -49,7 +45,25 @@ public class ConsultaLibrosServlet extends HttpServlet {
 			for(String id:ids) {
 				db.eliminarLibro(id);
 			}
-		}
+		} else if (boton.equals("Modificar Libros")) {
+			String[] ids = request.getParameterValues("recuperados");
+			Libro libro = db.recuperarLibro(ids[0]);
+			request.setAttribute("libro", libro);
+			request.setAttribute("FlagModificar", 1);
+			
+		} else if (boton.equals("Actualiza Libro")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			String titulo = request.getParameter("titulo");
+			String autor = request.getParameter("autor");
+			String editorial = request.getParameter("editorial");
+			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+			java.util.Date fecha = formatter.parse(request.getParameter("fecha"));
+			Date sqlfecha= new Date(fecha.getTime());
+			String categoria = request.getParameter("categoria");
+			int novedad = Integer.parseInt(request.getParameter("novedad"));
+			Libro libro = new Libro(id, titulo, autor, editorial, sqlfecha, categoria, novedad);
+			db.modificarLibro(libro);
+		}	
 		
 		ArrayList<Libro> libros = db.consultaLibros(filtro);
 		request.setAttribute("lista", libros);
