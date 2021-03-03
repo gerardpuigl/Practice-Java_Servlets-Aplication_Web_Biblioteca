@@ -1,9 +1,13 @@
 package servlet;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+
 import java.io.IOException;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,30 +20,60 @@ public class ConsultaLibrosServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, ParseException {
+		
+		BaseDatos db = new BaseDatos();
+		
+		String boton = request.getParameter("submit");
+		String filtro="";
+		if (boton.equals("Consulta Libros")) {
+			
+			filtro = request.getParameter("titulo");
 
-		String titulo = request.getParameter("titulo");
-		String path = getServletContext().getRealPath("/");
-		File f = new File(path + "libros.txt");
-		BufferedReader entrada = new BufferedReader(new FileReader(f));
-		StringBuffer sb = new StringBuffer();
-		while (entrada.ready()) {
-			String linea = entrada.readLine();
-			boolean presencia = linea.contains(titulo.toUpperCase());
-			if (presencia)
-				sb.append("<h3>" + linea + "</h3>");
+
+			
+		}else if (boton.equals("Insertar Libro")) {
+			int id = Integer.parseInt(request.getParameter("id"));
+			String titulo = request.getParameter("titulo");
+			String autor = request.getParameter("autor");
+			String editorial = request.getParameter("editorial");
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			java.util.Date fecha = formatter.parse(request.getParameter("fecha"));
+			Date sqlfecha= new Date(fecha.getTime());
+			String categoria = request.getParameter("categoria");
+			int novedad = Integer.parseInt(request.getParameter("novedad"));
+			Libro libro = new Libro(id, titulo, autor, editorial, sqlfecha, categoria, novedad);
+			db.insertarLibro(libro);
 		}
-		response.sendRedirect("consulta.jsp?lista=" + sb.toString());
+		
+		ArrayList<Libro> libros = db.consultaLibros(filtro);
+		request.setAttribute("lista", libros);
+		getServletContext().getRequestDispatcher("/consulta.jsp").forward(request, response);
+		
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		processRequest(request, response);
+			throws ServletException, IOException  {
+
+			try {
+				processRequest(request, response);
+			} catch (ServletException | IOException | ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		processRequest(request, response);
+			throws ServletException, IOException  {
+
+			try {
+				processRequest(request, response);
+			} catch (ServletException | IOException | ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 	}
 
 }

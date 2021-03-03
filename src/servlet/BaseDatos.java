@@ -1,6 +1,7 @@
 package servlet;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class BaseDatos {
 
@@ -25,14 +26,14 @@ public class BaseDatos {
 		try {
 			Statement s = conexion.createStatement();
 
-			String sql = "SELECT count(*) FROM USUARIOS WHERE usuario='" + usuario + "' "
-					+ "and password='" + password + "'";
+			String sql = "SELECT count(*) FROM USUARIOS WHERE usuario='" + usuario + "' " + "and password='" + password
+					+ "'";
 			s.execute(sql);
-			ResultSet rs=s.getResultSet();
+			ResultSet rs = s.getResultSet();
 			rs.next();
-			if (rs.getInt(1)>0)
-				check=true;
-			
+			if (rs.getInt(1) > 0)
+				check = true;
+
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -41,4 +42,45 @@ public class BaseDatos {
 
 	}
 
+	public ArrayList<Libro> consultaLibros(String filtro) {
+		ArrayList<Libro> lista = new ArrayList<Libro>();
+		try {
+			Statement s = conexion.createStatement();
+			String sql = "SELECT * FROM LIBROS WHERE TITULO LIKE '%" + filtro + "%'";
+			s.execute(sql);
+			ResultSet rs = s.getResultSet();
+			while (rs.next()) {
+				Libro libro = new Libro(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getDate(5),
+						rs.getString(6), rs.getInt(7));
+				lista.add(libro);
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+
+		return lista;
+	}
+
+	public void insertarLibro(Libro libro) {
+		String query ="insert into libros (id, titulo, autor, editorial, fecha, categoria, novedad)" + "values (?,?,?,?,?,?,?)";
+		try {
+						
+			PreparedStatement preparedStmt = conexion.prepareStatement(query);
+			preparedStmt.setInt(1,libro.getId());
+			preparedStmt.setString(2,libro.getTitulo());
+			preparedStmt.setString(3,libro.getAutor());
+			preparedStmt.setString(4,libro.getEditorial());
+			Date sqlDate = new Date(libro.getFecha().getTime());
+			preparedStmt.setDate(5, sqlDate);
+			preparedStmt.setString(6, libro.getCategoria());
+			preparedStmt.setInt(7,libro.getNovedad());
+			preparedStmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
+	
 }

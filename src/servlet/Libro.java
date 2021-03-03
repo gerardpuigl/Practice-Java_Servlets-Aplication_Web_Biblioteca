@@ -21,10 +21,25 @@ public class Libro {
 		this.categoria = categoria;
 		this.novedad = novedad;
 	}
-	
 	public int getId() {
 		return id;
 	}
-	
-	
+	public String getTitulo() {
+		return titulo;
+	}
+	public String getAutor() {
+		return autor;
+	}
+	public String getEditorial() {
+		return editorial;
+	}
+	public Date getFecha() {
+		return fecha;
+	}
+	public String getCategoria() {
+		return categoria;
+	}
+	public int getNovedad() {
+		return novedad;
+	}
 }
