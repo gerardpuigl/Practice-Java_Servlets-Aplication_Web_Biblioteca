@@ -82,5 +82,16 @@ public class BaseDatos {
 		}
 		
 	}
-	
+
+	public void eliminarLibro(String id) {
+		String query = " DELETE FROM libros WHERE id=" + Integer.parseInt(id) ;
+
+		try {
+			PreparedStatement preparedStmt = conexion.prepareStatement(query);
+			preparedStmt.executeUpdate();
+		} catch (SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+		
 }

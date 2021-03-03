@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Apliation_Web_Biblioteca_Servlets">
+        
+    <wb-module deploy-name="Aplication_Web_Biblioteca_Servlets">
+                
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+                
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="Apliation_Web_Biblioteca_Servlets"/>
-        <property name="java-output-path" value="/Apliation_Web_Biblioteca_Servlets/build/classes"/>
+                
+        <property name="java-output-path" value="/Aplication_Web_Biblioteca_Servlets/build/classes"/>
+        <property name="context-root" value="Aplication_Web_Biblioteca_Servlets"/>
+            
     </wb-module>
+    
 </project-modules>

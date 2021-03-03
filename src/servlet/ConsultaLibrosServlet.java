@@ -44,6 +44,11 @@ public class ConsultaLibrosServlet extends HttpServlet {
 			int novedad = Integer.parseInt(request.getParameter("novedad"));
 			Libro libro = new Libro(id, titulo, autor, editorial, sqlfecha, categoria, novedad);
 			db.insertarLibro(libro);
+		}else if (boton.equals("Eliminar Libros")) {
+			String[] ids = request.getParameterValues("eliminados");
+			for(String id:ids) {
+				db.eliminarLibro(id);
+			}
 		}
 		
 		ArrayList<Libro> libros = db.consultaLibros(filtro);
